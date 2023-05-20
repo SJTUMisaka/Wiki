@@ -1,9 +1,9 @@
-GET http://localhost:8880/hello
+GET http://localhost:8882/hello
 Accept: application/json
 
 ###
 
-POST http://localhost:8880/hello
+POST http://localhost:8882/hello
 Content-Type: application/x-www-form-urlencoded
 
 name=TEST
