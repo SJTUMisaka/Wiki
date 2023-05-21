@@ -5,6 +5,7 @@ import com.boheng.wiki.domain.EbookExample;
 import com.boheng.wiki.mapper.EbookMapper;
 import com.boheng.wiki.req.EbookReq;
 import com.boheng.wiki.resp.EbookResp;
+import com.boheng.wiki.util.CopyUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +23,8 @@ public class EbookService {
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         criteria.andNameLike("%" + req.getName() + "%");
         List<Ebook> ebooks = ebookMapper.selectByExample(ebookExample);
-        List<EbookResp> resps = new ArrayList<>();
-        for (Ebook ebook : ebooks) {
-            EbookResp ebookResp = new EbookResp();
-            BeanUtils.copyProperties(ebook, ebookResp);
-            resps.add(ebookResp);
-        }
 
-        return resps;
+        return CopyUtil.copyList(ebooks, EbookResp.class);
     }
 
 }
