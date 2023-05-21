@@ -1,6 +1,7 @@
 package com.boheng.wiki.controller;
 
 import com.boheng.wiki.domain.Ebook;
+import com.boheng.wiki.resp.CommonResp;
 import com.boheng.wiki.service.EbookService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +16,10 @@ public class EbookController {
     private EbookService ebookService;
 
     @GetMapping("/ebook/list")
-    public List<Ebook> list() {
-        return ebookService.list();
+    public CommonResp list() {
+        CommonResp<List<Ebook>> resp = new CommonResp<>();
+        List<Ebook> list = ebookService.list();
+        resp.setContent(list);
+        return resp;
     }
 }
