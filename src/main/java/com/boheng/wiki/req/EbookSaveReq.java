@@ -1,6 +1,6 @@
-package com.boheng.wiki.resp;
+package com.boheng.wiki.req;
 
-public class EbookResp {
+public class EbookSaveReq {
     private Long id;
 
     private String name;

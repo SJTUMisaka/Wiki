@@ -16,7 +16,7 @@
                 </template>
                 <template v-slot:action="{ text, record }">
                     <a-space size="small">
-                        <a-button type="primary" @click="edit">
+                        <a-button type="primary" @click="edit(record)">
                             Edit
                         </a-button>
                         <a-button type="danger">
@@ -33,7 +33,23 @@
             :confirm-loading="modalLoading"
             @ok="handleModalOk"
     >
-        test
+        <a-form :model="ebook" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+            <a-form-item label="封面">
+                <a-input v-model:value="ebook.cover" />
+            </a-form-item>
+            <a-form-item label="名称">
+                <a-input v-model:value="ebook.name" />
+            </a-form-item>
+            <a-form-item label="分类一">
+                <a-input v-model:value="ebook.category1Id" />
+            </a-form-item>
+            <a-form-item label="分类二">
+                <a-input v-model:value="ebook.category2Id" />
+            </a-form-item>
+            <a-form-item label="描述">
+                <a-input v-model:value="ebook.desc" type="textarea" />
+            </a-form-item>
+        </a-form>
     </a-modal>
 </template>
 
@@ -123,22 +139,32 @@
                 });
             };
 
+            const ebook = ref({});
             const modalVisible = ref(false);
             const modalLoading = ref(false);
             const handleModalOk = () => {
                 modalLoading.value = true;
-                setTimeout(() => {
-                    modalVisible.value = false;
-                    modalLoading.value = false;
-                }, 2000);
+                axios.post("/ebook/save", ebook.value).then((response) => {
+                    const data = response.data;
+                    if (data.success){
+                        modalVisible.value = false;
+                        modalLoading.value = false;
+
+                        handleQuery({
+                            page: pagination.value.current,
+                            size: pagination.value.pageSize
+                        });
+                    }
+                });
             };
 
             /**
              * Edit
              */
-            const edit = () => {
+            const edit = (record: any) => {
                 console.log("edit called");
                 modalVisible.value = true;
+                ebook.value = record;
             };
 
             onMounted(() => {
@@ -156,6 +182,7 @@
                 handleTableChange,
 
                 edit,
+                ebook,
 
                 modalVisible,
                 modalLoading,
