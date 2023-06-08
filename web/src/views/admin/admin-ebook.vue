@@ -3,6 +3,11 @@
         <a-layout-content
                 :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
         >
+            <p>
+                <a-button type="primary" @click="add()" size="large">
+                    Add
+                </a-button>
+            </p>
             <a-table
                     :columns="columns"
                     :row-key="record => record.id"
@@ -86,7 +91,8 @@
                 },
                 {
                     title: '分类二',
-                    key: 'category2Id'
+                    key: 'category2Id',
+                    dataIndex: 'category2Id'
                 },
                 {
                     title: '文档数',
@@ -167,6 +173,15 @@
                 ebook.value = record;
             };
 
+            /**
+             * Add
+             */
+            const add = () => {
+                console.log("add called");
+                modalVisible.value = true;
+                ebook.value = {};
+            };
+
             onMounted(() => {
                 handleQuery({
                     page: 1,
@@ -182,6 +197,7 @@
                 handleTableChange,
 
                 edit,
+                add,
                 ebook,
 
                 modalVisible,
