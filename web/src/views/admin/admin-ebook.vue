@@ -24,9 +24,16 @@
                         <a-button type="primary" @click="edit(record)">
                             Edit
                         </a-button>
-                        <a-button type="danger">
-                            Delete
-                        </a-button>
+                        <a-popconfirm
+                                title="Are you sure delete this ebook?"
+                                ok-text="Yes"
+                                cancel-text="No"
+                                @confirm="handleDelete(record.id)"
+                        >
+                            <a-button type="danger">
+                                删除
+                            </a-button>
+                        </a-popconfirm>
                     </a-space>
                 </template>
             </a-table>
@@ -40,19 +47,19 @@
     >
         <a-form :model="ebook" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
             <a-form-item label="封面">
-                <a-input v-model:value="ebook.cover" />
+                <a-input v-model:value="ebook.cover"/>
             </a-form-item>
             <a-form-item label="名称">
-                <a-input v-model:value="ebook.name" />
+                <a-input v-model:value="ebook.name"/>
             </a-form-item>
             <a-form-item label="分类一">
-                <a-input v-model:value="ebook.category1Id" />
+                <a-input v-model:value="ebook.category1Id"/>
             </a-form-item>
             <a-form-item label="分类二">
-                <a-input v-model:value="ebook.category2Id" />
+                <a-input v-model:value="ebook.category2Id"/>
             </a-form-item>
             <a-form-item label="描述">
-                <a-input v-model:value="ebook.desc" type="textarea" />
+                <a-input v-model:value="ebook.description" type="textarea"/>
             </a-form-item>
         </a-form>
     </a-modal>
@@ -120,10 +127,10 @@
                 loading.value = true;
                 ebooks.value = [];
                 axios.get("/ebook/list", {
-                  params: {
-                    page: params.page,
-                    size: params.size
-                  }
+                    params: {
+                        page: params.page,
+                        size: params.size
+                    }
                 }).then((response) => {
                     loading.value = false;
                     const data = response.data;
@@ -152,7 +159,7 @@
                 modalLoading.value = true;
                 axios.post("/ebook/save", ebook.value).then((response) => {
                     const data = response.data;
-                    if (data.success){
+                    if (data.success) {
                         modalVisible.value = false;
                         modalLoading.value = false;
 
@@ -182,6 +189,18 @@
                 ebook.value = {};
             };
 
+            const handleDelete = (id: number) => {
+                axios.delete("/ebook/delete/" + id).then((response) => {
+                    const data = response.data;
+                    if (data.success) {
+                        handleQuery({
+                            page: pagination.value.current,
+                            size: pagination.value.pageSize
+                        });
+                    }
+                });
+            };
+
             onMounted(() => {
                 handleQuery({
                     page: 1,
@@ -202,7 +221,8 @@
 
                 modalVisible,
                 modalLoading,
-                handleModalOk
+                handleModalOk,
+                handleDelete
             }
         }
     });
