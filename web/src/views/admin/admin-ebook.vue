@@ -69,6 +69,7 @@
 <script lang="ts">
     import {defineComponent, onMounted, ref} from 'vue';
     import axios from 'axios';
+    import {message} from "ant-design-vue";
 
     export default defineComponent({
         name: 'AdminEbook',
@@ -76,7 +77,7 @@
             const ebooks = ref();
             const pagination = ref({
                 current: 1,
-                pageSize: 2,
+                pageSize: 2222,
                 total: 0
             });
             const loading = ref(false);
@@ -134,11 +135,14 @@
                 }).then((response) => {
                     loading.value = false;
                     const data = response.data;
-                    ebooks.value = data.content.list;
-
-                    // Reset Pagination
-                    pagination.value.current = params.page;
-                    pagination.value.total = data.content.total;
+                    if (data.success) {
+                        ebooks.value = data.content.list;
+                        // Reset Pagination
+                        pagination.value.current = params.page;
+                        pagination.value.total = data.content.total;
+                    } else {
+                        message.error(data.message);
+                    }
                 });
             };
 
