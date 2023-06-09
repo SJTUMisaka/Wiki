@@ -77,7 +77,7 @@
             const ebooks = ref();
             const pagination = ref({
                 current: 1,
-                pageSize: 2222,
+                pageSize: 2,
                 total: 0
             });
             const loading = ref(false);
@@ -167,6 +167,14 @@
                         modalVisible.value = false;
                         modalLoading.value = false;
 
+                        handleQuery({
+                            page: pagination.value.current,
+                            size: pagination.value.pageSize
+                        });
+                    }
+                    else {
+                        message.error(data.message);
+                        modalLoading.value = false;
                         handleQuery({
                             page: pagination.value.current,
                             size: pagination.value.pageSize

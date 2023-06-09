@@ -1,8 +1,12 @@
 package com.boheng.wiki.req;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 public class EbookSaveReq {
     private Long id;
 
+    @NotEmpty(message = "Name should not be empty")
     private String name;
 
     private Long category1Id;
