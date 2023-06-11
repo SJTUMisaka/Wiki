@@ -11,10 +11,7 @@
                                 placeholder="input search text"
                                 enter-button="Search"
                                 size="large"
-                                @search="handleQuery({
-                            page: 1,
-                            size: pagination.pageSize,
-                        })">
+                                @search="search()">
                         </a-input-search>
                     </a-form-item>
                     <a-form-item>
@@ -93,6 +90,7 @@
         name: 'AdminEbook',
         setup() {
             const name = ref('');
+            const paramName = ref('');
             const ebooks = ref();
             const pagination = ref({
                 current: 1,
@@ -150,7 +148,7 @@
                     params: {
                         page: params.page,
                         size: params.size,
-                        name: name.value,
+                        name: paramName.value,
                     }
                 }).then((response) => {
                     loading.value = false;
@@ -220,6 +218,17 @@
                 ebook.value = {};
             };
 
+            /**
+             * Search
+             */
+            const search = () => {
+                console.log("search called");
+                paramName.value = name.value;
+                handleQuery({
+                    page: 1,
+                    size: pagination.value.pageSize,
+                })
+            };
 
             const handleDelete = (id: number) => {
                 axios.delete("/ebook/delete/" + id).then((response) => {
@@ -251,7 +260,7 @@
                 add,
                 ebook,
                 name,
-                handleQuery,
+                search,
 
                 modalVisible,
                 modalLoading,
