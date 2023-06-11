@@ -4,9 +4,26 @@
                 :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
         >
             <p>
-                <a-button type="primary" @click="add()" size="large">
-                    Add
-                </a-button>
+                <a-form layout="inline">
+                    <a-form-item>
+                        <a-input-search
+                                v-model:value="name"
+                                placeholder="input search text"
+                                enter-button="Search"
+                                size="large"
+                                @search="handleQuery({
+                            page: 1,
+                            size: pagination.pageSize,
+                        })">
+                        </a-input-search>
+                    </a-form-item>
+                    <a-form-item>
+                        <a-button type="primary" @click="add()" size="large">
+                            Add
+                        </a-button>
+                    </a-form-item>
+                </a-form>
+
             </p>
             <a-table
                     :columns="columns"
@@ -121,6 +138,7 @@
                 }
             ];
 
+            const name = ref('');
             /**
              * 数据查询
              **/
@@ -130,7 +148,8 @@
                 axios.get("/ebook/list", {
                     params: {
                         page: params.page,
-                        size: params.size
+                        size: params.size,
+                        name: name.value,
                     }
                 }).then((response) => {
                     loading.value = false;
@@ -171,8 +190,7 @@
                             page: pagination.value.current,
                             size: pagination.value.pageSize
                         });
-                    }
-                    else {
+                    } else {
                         message.error(data.message);
                         modalLoading.value = false;
                         handleQuery({
@@ -200,6 +218,7 @@
                 modalVisible.value = true;
                 ebook.value = {};
             };
+
 
             const handleDelete = (id: number) => {
                 axios.delete("/ebook/delete/" + id).then((response) => {
@@ -230,6 +249,8 @@
                 edit,
                 add,
                 ebook,
+                name,
+                handleQuery,
 
                 modalVisible,
                 modalLoading,
