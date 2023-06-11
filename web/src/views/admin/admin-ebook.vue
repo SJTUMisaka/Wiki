@@ -48,7 +48,7 @@
                                 @confirm="handleDelete(record.id)"
                         >
                             <a-button type="danger">
-                                删除
+                                Delete
                             </a-button>
                         </a-popconfirm>
                     </a-space>
@@ -63,19 +63,19 @@
             @ok="handleModalOk"
     >
         <a-form :model="ebook" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
-            <a-form-item label="封面">
+            <a-form-item label="Cover">
                 <a-input v-model:value="ebook.cover"/>
             </a-form-item>
-            <a-form-item label="名称">
+            <a-form-item label="Name">
                 <a-input v-model:value="ebook.name"/>
             </a-form-item>
-            <a-form-item label="分类一">
+            <a-form-item label="Category1">
                 <a-input v-model:value="ebook.category1Id"/>
             </a-form-item>
-            <a-form-item label="分类二">
+            <a-form-item label="Category2">
                 <a-input v-model:value="ebook.category2Id"/>
             </a-form-item>
-            <a-form-item label="描述">
+            <a-form-item label="Description">
                 <a-input v-model:value="ebook.description" type="textarea"/>
             </a-form-item>
         </a-form>
@@ -101,34 +101,34 @@
 
             const columns = [
                 {
-                    title: '封面',
+                    title: 'Cover',
                     dataIndex: 'cover',
                     slots: {customRender: 'cover'}
                 },
                 {
-                    title: '名称',
+                    title: 'Name',
                     dataIndex: 'name'
                 },
                 {
-                    title: '分类一',
+                    title: 'Category1Id',
                     key: 'category1Id',
                     dataIndex: 'category1Id'
                 },
                 {
-                    title: '分类二',
+                    title: 'Category2Id',
                     key: 'category2Id',
                     dataIndex: 'category2Id'
                 },
                 {
-                    title: '文档数',
+                    title: 'DocCount',
                     dataIndex: 'docCount'
                 },
                 {
-                    title: '阅读数',
+                    title: 'ViewCount',
                     dataIndex: 'viewCount'
                 },
                 {
-                    title: '点赞数',
+                    title: 'VoteCount',
                     dataIndex: 'voteCount'
                 },
                 {
