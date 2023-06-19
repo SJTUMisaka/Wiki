@@ -26,9 +26,8 @@
                     :columns="columns"
                     :row-key="record => record.id"
                     :data-source="categories"
-                    :pagination="pagination"
+                    :pagination="false"
                     :loading="loading"
-                    @change="handleTableChange"
             >
                 <template #cover="{ text: cover }">
                     <img v-if="cover" :src="cover" alt="avatar"/>
@@ -86,11 +85,6 @@
             const name = ref('');
             const paramName = ref('');
             const categories = ref();
-            const pagination = ref({
-                current: 1,
-                pageSize: 2,
-                total: 0
-            });
             const loading = ref(false);
 
             const columns = [
@@ -118,38 +112,20 @@
             /**
              * 数据查询
              **/
-            const handleQuery = (params: any) => {
+            const handleQuery = () => {
                 loading.value = true;
                 categories.value = [];
-                axios.get("/category/list", {
-                    params: {
-                        page: params.page,
-                        size: params.size,
-                        name: paramName.value,
-                    }
-                }).then((response) => {
+                axios.get("/category/all").then((response) => {
                     loading.value = false;
                     const data = response.data;
                     if (data.success) {
-                        categories.value = data.content.list;
-                        // Reset Pagination
-                        pagination.value.current = params.page;
-                        pagination.value.total = data.content.total;
+                        categories.value = data.content;
                     } else {
                         message.error(data.message);
                     }
                 });
             };
 
-            /**
-             * 表格点击页码时触发
-             */
-            const handleTableChange = (pagination: any) => {
-                handleQuery({
-                    page: pagination.current,
-                    size: pagination.pageSize
-                });
-            };
 
             const category = ref({});
             const modalVisible = ref(false);
@@ -162,17 +138,11 @@
                         modalVisible.value = false;
                         modalLoading.value = false;
 
-                        handleQuery({
-                            page: pagination.value.current,
-                            size: pagination.value.pageSize
-                        });
+                        handleQuery();
                     } else {
                         message.error(data.message);
                         modalLoading.value = false;
-                        handleQuery({
-                            page: pagination.value.current,
-                            size: pagination.value.pageSize
-                        });
+                        handleQuery();
                     }
                 });
             };
@@ -201,37 +171,26 @@
             const search = () => {
                 console.log("search called");
                 paramName.value = name.value;
-                handleQuery({
-                    page: 1,
-                    size: pagination.value.pageSize,
-                })
+                handleQuery()
             };
 
             const handleDelete = (id: number) => {
                 axios.delete("/category/delete/" + id).then((response) => {
                     const data = response.data;
                     if (data.success) {
-                        handleQuery({
-                            page: pagination.value.current,
-                            size: pagination.value.pageSize
-                        });
+                        handleQuery();
                     }
                 });
             };
 
             onMounted(() => {
-                handleQuery({
-                    page: 1,
-                    size: pagination.value.pageSize
-                });
+                handleQuery();
             });
 
             return {
                 categories: categories,
-                pagination,
                 columns,
                 loading,
-                handleTableChange,
 
                 edit,
                 add,
