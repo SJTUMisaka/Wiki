@@ -119,7 +119,7 @@
                     loading.value = false;
                     const data = response.data;
                     if (data.success) {
-                        categories.value = data.content;
+                        categories.value = Tool.array2Tree(data.content, 0);
                     } else {
                         message.error(data.message);
                     }
