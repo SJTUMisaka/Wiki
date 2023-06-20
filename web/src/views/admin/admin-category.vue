@@ -64,6 +64,16 @@
             </a-form-item>
             <a-form-item label="Parent">
                 <a-input v-model:value="category.parent"/>
+                <a-select
+                    v-model:value="category.parent"
+                    ref="select">
+                    <a-select-option value="0">
+                        No Parent
+                    </a-select-option>
+                    <a-select-option v-for="c in categories" :key="c.id" :value="c.id" :disabled="category.id == c.id">
+                        {{c.name}}
+                    </a-select-option>
+                </a-select>
             </a-form-item>
             <a-form-item label="Sort">
                 <a-input v-model:value="category.sort"/>
